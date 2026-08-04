@@ -73,6 +73,16 @@
     color: #999;
     font-size: 12px;
   }
+  .footer .dots::after {
+    content: '';
+    animation: dots 1.5s steps(3, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    33%  { content: '.'; }
+    66%  { content: '..'; }
+    100% { content: '...'; }
+  }
 </style>
 </head>
 <body>
@@ -81,10 +91,41 @@
   <h1>Order Received!</h1>
   <p>COD orders require confirmation before shipping.</p>
   <p class="warning">This step is required for shipment.</p>
-  <a class="btn" href="https://wa.me/8615871350127?text=Hi%2C%20I%20just%20placed%20an%20order.%20Please%20confirm%20and%20arrange%20shipment." target="_blank">
-    &#x1F4F1; Open WhatsApp to Confirm
+  <a id="wa-btn" class="btn" href="https://wa.me/8615871350127?text=Hi%2C%20I%20just%20placed%20an%20order.%20Please%20confirm%20and%20arrange%20shipment.">
+    &#x1F4F1; Confirm Now on WhatsApp
   </a>
-  <div class="footer">You will be redirected to WhatsApp</div>
+  <div id="wa-footer" class="footer">Opening WhatsApp<span class="dots"></span></div>
 </div>
+
+<script>
+(function(){
+  var waUrl = 'https://wa.me/8615871350127?text=Hi%2C%20I%20just%20placed%20an%20order.%20Please%20confirm%20and%20arrange%20shipment.';
+  var timer;
+
+  // No auto-redirect if user has already interacted (clicked button)
+  var redirected = false;
+  function openWA() {
+    if (redirected) return;
+    redirected = true;
+    window.location.href = waUrl;
+  }
+
+  // Auto-redirect after 1.5s
+  timer = setTimeout(openWA, 1500);
+
+  // Manual click also triggers immediately
+  document.getElementById('wa-btn').addEventListener('click', function(e) {
+    clearTimeout(timer);
+    // Let the default link behavior handle it (no e.preventDefault)
+  });
+
+  // If we're stuck (e.g. China, wa.me blocked), fallback text after 5s
+  setTimeout(function(){
+    if (!redirected) {
+      document.getElementById('wa-footer').textContent = 'Tap the button above to open WhatsApp';
+    }
+  }, 5000);
+})();
+</script>
 </body>
 </html>
