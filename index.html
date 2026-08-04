@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="2;url=https://wa.me/8615871350127?text=Hi%2C%20I%20just%20placed%20an%20order.%20Please%20confirm%20and%20arrange%20shipment.">
 <title>Puresensez - Order Confirmation</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -99,32 +100,18 @@
 
 <script>
 (function(){
-  var waUrl = 'https://wa.me/8615871350127?text=Hi%2C%20I%20just%20placed%20an%20order.%20Please%20confirm%20and%20arrange%20shipment.';
-  var timer;
-
-  // No auto-redirect if user has already interacted (clicked button)
-  var redirected = false;
-  function openWA() {
-    if (redirected) return;
-    redirected = true;
-    window.location.href = waUrl;
-  }
-
-  // Auto-redirect after 1.5s
-  timer = setTimeout(openWA, 1500);
-
-  // Manual click also triggers immediately
-  document.getElementById('wa-btn').addEventListener('click', function(e) {
-    clearTimeout(timer);
-    // Let the default link behavior handle it (no e.preventDefault)
-  });
-
-  // If we're stuck (e.g. China, wa.me blocked), fallback text after 5s
-  setTimeout(function(){
-    if (!redirected) {
-      document.getElementById('wa-footer').textContent = 'Tap the button above to open WhatsApp';
+  // Visual countdown only (actual redirect handled by meta refresh)
+  var sec = 2;
+  var footer = document.getElementById('wa-footer');
+  var tick = setInterval(function(){
+    sec--;
+    if (sec <= 0) {
+      footer.textContent = 'Opening WhatsApp...';
+      clearInterval(tick);
+    } else {
+      footer.textContent = 'Opening WhatsApp in ' + sec + 's';
     }
-  }, 5000);
+  }, 1000);
 })();
 </script>
 </body>
